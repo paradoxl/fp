@@ -29,7 +29,7 @@ int main()
 
     if (user.exsists() == true)
     {
-        //cout << "welcome to the worlds most ok nutrient calculator" << endl;
+        cout << "welcome to the worlds most ok nutrient calculator" << endl;
         cout << "how would you like to continue?" << endl;
 
         cout << "1: add food" << endl;

@@ -105,7 +105,7 @@ bool userProfile::exsists()
 
     cout << "What is the name that is attached to the account?" << endl;
     cin >> userName;
-
+    // this block runs twice for some reason
     int curLine;
     string line;
     string temp;
