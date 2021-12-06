@@ -12,7 +12,7 @@ private:
 public:
     userProfile();
     ~userProfile();
-    void printUser(float protien, float carb, float fat);
+    void printUser();
     void saveUser();
     void changeName();
     void removeMeal();
@@ -31,10 +31,11 @@ public:
     float calorieGoal;
 
     string foodName;
-    float protein;
-    float fat;
-    float carb;
+    string protein;
+    string fat;
+    string carb;
    
+   vector<string> foodLog;
 };
 
 void userProfile::saveUser()
@@ -168,10 +169,13 @@ void userProfile::addMeal()
             inFile >> carb;
             inFile >> fat;
         }
-        // foodLog.push_back(foodName);
-        // foodLog.push_back(protein);
-        // foodLog.push_back(carb);
-        // foodLog.push_back(fat);
+        foodLog.push_back(foodName);
+        foodLog.push_back(protein);
+        foodLog.push_back(carb);
+        foodLog.push_back(fat);
+        
+
+       
     }
 
     inFile.close();
@@ -232,11 +236,19 @@ void userProfile::addMeal()
     else if( additionalFood == "N" || additionalFood == "N"){
         cout << "thanks! your values are:" <<endl;
 
-        printUser(protein,fat,carb);
+        printUser();
     }
 }
-void userProfile::printUser(float protein,float fat,float carb)
+void userProfile::printUser()
 {
+    for (int i = 0; i < foodLog.size(); i++){
+        protein = foodLog.at(2);
+        carb = foodLog.at(3);
+        fat = foodLog.at(4);
+        // assumes there is only one food added
+        //doesnt actually add;
+        cout << foodLog.at(i);
+    }
     cout << "Macros: " << endl;
     cout << "Caloric goal: " << calorieGoal << "Current Calories" << "todo" <<endl;
     cout << " Protein goal: " << proteinGoal <<"Current Protein: " << protein << endl;

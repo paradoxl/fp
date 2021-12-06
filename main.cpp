@@ -5,11 +5,6 @@ using namespace std;
 
 int main()
 {
-
-    float protein;
-    float fat; 
-    float carb;
-
     userProfile user;
 
     cout << "Welcome! Please login or create an account to continue" << endl;
@@ -50,7 +45,6 @@ int main()
         case 1:
             user.addMeal();
             break;
-
         case 2:
             // todo remove food
             break;
@@ -59,9 +53,8 @@ int main()
             break;
         // todo change UN
         case 4:
-            user.printUser(protein, fat, carb);
+            user.printUser();
             break;
-
         case 5:
             return 0;
             break;
