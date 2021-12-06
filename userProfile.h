@@ -174,7 +174,7 @@ void userProfile::addMeal()
         foodLog.push_back(carb);
         foodLog.push_back(fat);
         
-
+//
        
     }
 
