@@ -6,10 +6,12 @@ using namespace std;
 int main()
 {
     userProfile user;
-
+    
+    cout << setw(80) << setfill('-') << "" << setfill(' ') << endl;
+    cout << endl;
     cout << "Welcome! Please login or create an account to continue" << endl;
-    cout << "1: login"
-         << "2: sign up" << endl;
+    cout << "1: login" << endl;
+    cout << "2: sign up" << endl;
     int login;
     cin >> login;
 
@@ -29,14 +31,16 @@ int main()
 
     if (user.exsists() == true)
     {
-        cout << "welcome to the worlds most ok nutrient calculator" << endl;
-        cout << "how would you like to continue?" << endl;
+        cout << setw(80) << setfill('-') << "" << setfill(' ') << endl;
+        cout << endl;
+        cout << "Welcome to the worlds most ok nutrient calculator" << endl;
+        cout << "How would you like to continue?" << endl;
 
         cout << "1: add food" << endl;
         cout << "2: remove food" << endl;
         cout << "3: change username" << endl;
         cout << "4: display current macros" << endl;
-        cout << "5: Exit" << endl;
+        cout << "5: exit" << endl;
         int condition;
         cin >> condition;
 
@@ -46,7 +50,7 @@ int main()
             user.addMeal();
             break;
         case 2:
-            // todo remove food
+        // todo remove food
             break;
 
         case 3:

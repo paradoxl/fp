@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <string>
 #include <vector>
+
 using namespace std;
 
 class userProfile
@@ -72,7 +73,7 @@ void userProfile::saveUser()
 
     calorieGoal = (proteinGoal * 9) + (carbGoal * 4) + (fatGoal * 4);
 
-    cout << "your calculated calorie goal based on this info is: " << calorieGoal << endl;
+    cout << "Your calculated calorie goal based on this info is: " << calorieGoal << endl;
 
     ofstream write;
 
@@ -90,9 +91,10 @@ void userProfile::saveUser()
 
     write.close();
 }
+
+
 bool userProfile::exsists()
 {
-
     ifstream inFile;
 
     inFile.open("user.txt");
@@ -101,32 +103,45 @@ bool userProfile::exsists()
     {
         cout << "Cannot open input file." << endl;
     }
-    string userName;
 
-    cout << "What is the name that is attached to the account?" << endl;
-    cin >> userName;
-    // this block runs twice for some reason
+    cout << setw(80) << setfill('-') << "" << setfill(' ') << endl;
+    cout << endl;
+    cout << "What is the name that is attached to the account?" << endl;  // this block runs twice for some reason
+    cin >> name;
+    
     int curLine;
     string line;
     string temp;
-
+    string first;
+    string last;
+    int isFirst = 0;
+    int count = 0;
+    
     while (getline(inFile, line))
     {
-
-        if (line.find(userName, 0) != string::npos)
+        if(isFirst == 0)
         {
+            first = line;
+            isFirst = 1;
+            last = line; //in each iteration last will be updated
+            count++;
             return true;
+         
         }
         else
         {
+            cout << "could not read name from file" << endl;
             return false;
         }
     }
+    return 0;
 }
+
+
+
 void userProfile::addMeal()
 {
     
-
     ifstream inFile;
 
     vector<string> foodLog;
@@ -174,7 +189,6 @@ void userProfile::addMeal()
         foodLog.push_back(carb);
         foodLog.push_back(fat);
         
-//
        
     }
 
@@ -239,25 +253,33 @@ void userProfile::addMeal()
         printUser();
     }
 }
+
+
 void userProfile::printUser()
 {
     for (int i = 0; i < foodLog.size(); i++){
         protein = foodLog.at(2);
         carb = foodLog.at(3);
         fat = foodLog.at(4);
-        // assumes there is only one food added
+        //assumes there is only one food added
         //doesnt actually add;
         cout << foodLog.at(i);
     }
+    cout << setw(80) << setfill('-') << "" << setfill(' ') << endl;
+    cout << endl;
     cout << "Macros: " << endl;
-    cout << "Caloric goal: " << calorieGoal << "Current Calories" << "todo" <<endl;
-    cout << " Protein goal: " << proteinGoal <<"Current Protein: " << protein << endl;
-    cout << "Carb goal: " << carbGoal << "Current carbs: " << carb << endl;
-    cout << "fat goal: " << fatGoal << "CUrrent fat: " << fat << endl;
+    cout << "Caloric goal: " << calorieGoal << "         Current Calories: " << "todo" <<endl;
+    cout << "Protein goal: " << proteinGoal << "         Current Protein: " << protein << endl;
+    cout << "Carb goal: " << carbGoal << "            Current Carbs: " << carb << endl;
+    cout << "Fat goal: " << fatGoal << "             Current Fat: " << fat << endl;
 }
+
+
 userProfile::userProfile()
 {
 }
+
+
 
 userProfile::~userProfile()
 {
