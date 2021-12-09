@@ -95,7 +95,8 @@ void userProfile::saveUser()
 
 bool userProfile::exsists()
 {
-    ifstream inFile;
+   
+ifstream inFile;
 
     inFile.open("user.txt");
 
@@ -103,30 +104,22 @@ bool userProfile::exsists()
     {
         cout << "Cannot open input file." << endl;
     }
-
     cout << setw(80) << setfill('-') << "" << setfill(' ') << endl;
     cout << endl;
-    cout << "What is the name that is attached to the account?" << endl;  // this block runs twice for some reason
+    cout << "What is the name that is attached to the account?" << endl; //this block runs twice for some reason
     cin >> name;
-    
+
     int curLine;
     string line;
     string temp;
-    string first;
-    string last;
-    int isFirst = 0;
-    int count = 0;
+    string name;
     
     while (getline(inFile, line))
     {
-        if(isFirst == 0)
+        if (line.find(name, 0) != string::npos)
         {
-            first = line;
-            isFirst = 1;
-            last = line; //in each iteration last will be updated
-            count++;
+            cout << "\nloading your account..." << endl;
             return true;
-         
         }
         else
         {
@@ -136,7 +129,6 @@ bool userProfile::exsists()
     }
     return 0;
 }
-
 
 
 void userProfile::addMeal()
