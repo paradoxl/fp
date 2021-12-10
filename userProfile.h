@@ -4,7 +4,6 @@
 #include <iomanip>
 #include <string>
 #include <vector>
-
 using namespace std;
 
 class userProfile
@@ -19,6 +18,8 @@ public:
     void removeMeal();
     void addMeal();
     bool exsists();
+    void menu();
+    void login();
 
     string name;
     int age;
@@ -35,10 +36,140 @@ public:
     string protein;
     string fat;
     string carb;
-   
-   vector<string> foodLog;
-};
 
+    vector<string> foodLog;
+    vector<float> foodGoals;
+};
+void userProfile::login(){
+    cout << "Welcome! Please login or create an account to continue" << endl;
+    cout << "1: login"
+         << "2: sign up" << endl;
+    int login;
+    cin >> login;
+
+     if (login == 1)
+    {
+        if(exsists() == true){
+            menu();
+        }
+        else{
+            cout << "Incorrect input please try again" <<endl;
+        }
+    }
+    else if (login == 2)
+    {
+        saveUser();
+    }
+
+    else
+    {
+        cout << "INVALID INPUT" << endl;
+    }
+}
+void userProfile::menu(){
+    cout << "welcome to the worlds most ok nutrient calculator" << endl;
+        cout << "how would you like to continue?" << endl;
+
+        cout << "1: add food" << endl;
+        cout << "2: remove food" << endl;
+        cout << "3: change username" << endl;
+        cout << "4: display current macros" << endl;
+        cout << "5: Exit" << endl;
+        int condition;
+        cin >> condition;
+
+        switch (condition)
+        {
+        case 1:
+           addMeal();
+            break;
+        case 2:
+            cout << "This feature is not yet available" << endl;
+            break;
+        case 3:
+            changeName();
+            break;
+        case 4:
+            printUser();
+            break;
+        case 5:
+            cout << "Thanks for using the world's most ok macronutrient calculator" <<endl;
+            break;
+        }
+}
+void userProfile::changeName()
+{
+    string filename, name, Newname, newContent = "";
+    string word, temp;
+    int noOfWords = 0, noOfReplacements = 0, matched, replaced;
+
+    cout << setw(80) << setfill('-') << "" << setfill(' ') << endl;
+    cout << endl;
+    cout << "Enter a text file name: ";
+    cin >> filename;
+    cout << "Please type your old username: ";
+    cin >> name;
+    cout << "Please type your new username: ";
+    cin >> Newname;
+    cout << "\n";
+
+    ifstream inFile;
+    inFile.open(filename.c_str());
+
+    if (!inFile) // If file cannot be opened
+        cout << "File cannot be opened." << endl;
+
+    else
+    {
+
+        string content((istreambuf_iterator<char>(inFile)), (istreambuf_iterator<char>()));
+        inFile.close();
+
+        for (int i = 0; content[i] != '\0'; i++)
+        {
+            if (content[i] == ' ' && i != 0)
+                noOfWords += 1;
+            matched = 1;
+            replaced = 0;
+
+            if (content[i] == name[0])
+            {
+                temp = "";
+
+                for (int j = 0; name[j] != '\0'; j++)
+                {
+                    temp += content[i];
+                    if (content[i] != name[j])
+                    {
+                        matched = 0;
+                    }
+                    i = i + 1;
+                }
+                i--;
+
+                if (matched == 1)
+                {
+                    newContent += Newname;
+                    noOfReplacements++;
+                }
+                else
+                {
+                    newContent += temp;
+                }
+            }
+            else
+            {
+                newContent += content[i];
+            }
+        }
+        noOfWords += 1;
+        ofstream outFile;
+        outFile.open(filename.c_str());
+        outFile << newContent << endl;
+        outFile.close();
+    }
+    
+}
 void userProfile::saveUser()
 {
     cout << setw(80) << setfill('-') << "" << setfill(' ') << endl;
@@ -73,7 +204,7 @@ void userProfile::saveUser()
 
     calorieGoal = (proteinGoal * 9) + (carbGoal * 4) + (fatGoal * 4);
 
-    cout << "Your calculated calorie goal based on this info is: " << calorieGoal << endl;
+    cout << "your calculated calorie goal based on this info is: " << calorieGoal << endl;
 
     ofstream write;
 
@@ -86,17 +217,20 @@ void userProfile::saveUser()
 
     if (write.is_open())
     {
-        write << name << " " << weight << " " << height << " " << age << " " << sex << " " << proteinGoal << " " << carbGoal << " " << fatGoal << " " << calorieGoal << endl;
+        write << "User Info"
+              << " " << name << " " << weight << " " << height << " " << age << " " << sex << endl;
+        write << "Macros"
+              << " " << calorieGoal << " " << proteinGoal << " " << carbGoal << " " << fatGoal << " " << calorieGoal << endl;
+
+        // to seperate writes to deliniate users personal info with the macro goals
     }
 
     write.close();
 }
-
-
 bool userProfile::exsists()
 {
-   
-ifstream inFile;
+
+    ifstream inFile;
 
     inFile.open("user.txt");
 
@@ -104,39 +238,37 @@ ifstream inFile;
     {
         cout << "Cannot open input file." << endl;
     }
-    cout << setw(80) << setfill('-') << "" << setfill(' ') << endl;
-    cout << endl;
-    cout << "What is the name that is attached to the account?" << endl; //this block runs twice for some reason
-    cin >> name;
+    string userName;
 
+    cout << "What is the name that is attached to the account?" << endl;
+    cin >> userName;
+    // this block runs twice for some reason
     int curLine;
     string line;
     string temp;
-    string name;
-    
+
     while (getline(inFile, line))
     {
-        if (line.find(name, 0) != string::npos)
+
+        if (line.find(userName, 0) != string::npos)
         {
-            cout << "\nloading your account..." << endl;
             return true;
         }
         else
         {
-            cout << "could not read name from file" << endl;
             return false;
         }
+        // possible issue here on different compilers
     }
-    return 0;
+
+    // loading user goals
+
+    inFile.close();
 }
-
-
 void userProfile::addMeal()
 {
-    
-    ifstream inFile;
 
-    vector<string> foodLog;
+    ifstream inFile;
 
     inFile.open("food.txt");
 
@@ -175,13 +307,14 @@ void userProfile::addMeal()
             inFile >> protein;
             inFile >> carb;
             inFile >> fat;
+
+            foodLog.push_back(foodName);
+            foodLog.push_back(protein);
+            foodLog.push_back(carb);
+            foodLog.push_back(fat);
         }
-        foodLog.push_back(foodName);
-        foodLog.push_back(protein);
-        foodLog.push_back(carb);
-        foodLog.push_back(fat);
-        
-       
+
+        //
     }
 
     inFile.close();
@@ -207,17 +340,18 @@ void userProfile::addMeal()
                 inFile >> protein;
                 inFile >> carb;
                 inFile >> fat;
+
+                foodLog.push_back(protein);
+                foodLog.push_back(carb);
+                foodLog.push_back(fat);
             }
+
             curLine++;
             if (line.find(search2, 0) != string::npos)
             {
                 cout << "found: " << search2 << " Macronutrients " << line << endl;
             }
         }
-        // foodLog.push_back(foodName);
-        // foodLog.push_back(protein);
-        // foodLog.push_back(carb);
-        // foodLog.push_back(fat);
 
         inFile.close();
     }
@@ -231,48 +365,85 @@ void userProfile::addMeal()
         cout << "incorrect input" << endl;
     }
 
-    cout << "Would you like to add another food to this meal? " <<endl;
+    cout << "Would you like to add another food to this meal? " << endl;
     string additionalFood;
-    cin>>additionalFood;
+    cin >> additionalFood;
 
-    if (additionalFood == "Y" || additionalFood == "y"){
+    if (additionalFood == "Y" || additionalFood == "y")
+    {
         addMeal();
     }
 
-    else if( additionalFood == "N" || additionalFood == "N"){
-        cout << "thanks! your values are:" <<endl;
+    else if (additionalFood == "N" || additionalFood == "n")
+    {
+        cout << "thanks! your values are:" << endl;
 
         printUser();
     }
 }
-
-
 void userProfile::printUser()
 {
-    for (int i = 0; i < foodLog.size(); i++){
-        protein = foodLog.at(2);
-        carb = foodLog.at(3);
-        fat = foodLog.at(4);
-        //assumes there is only one food added
-        //doesnt actually add;
-        cout << foodLog.at(i);
+
+    ifstream inFile;
+
+    inFile.open("user.txt");
+    string line;
+
+    if (!inFile)
+    {
+        cout << "Cannot open input file." << endl;
+        return;
     }
-    cout << setw(80) << setfill('-') << "" << setfill(' ') << endl;
-    cout << endl;
+
+    while (getline(inFile, line))
+    {
+        string sent;
+
+        inFile >> line;
+
+        if (line == "Macros")
+        {
+            inFile >> calorieGoal;
+            inFile >> proteinGoal;
+            inFile >> carbGoal;
+            inFile >> fatGoal;
+        }
+
+        // possible issue here on different compilers
+    }
+
+    inFile.close();
+
+    for (int i = 0; i < foodGoals.size(); i++)
+    {
+        cout << foodGoals.at(i);
+        cout << "debug" << endl;
+    }
     cout << "Macros: " << endl;
-    cout << "Caloric goal: " << calorieGoal << "         Current Calories: " << "todo" <<endl;
-    cout << "Protein goal: " << proteinGoal << "         Current Protein: " << protein << endl;
-    cout << "Carb goal: " << carbGoal << "            Current Carbs: " << carb << endl;
-    cout << "Fat goal: " << fatGoal << "             Current Fat: " << fat << endl;
+    cout << "Caloric goal: " << calorieGoal << "Current Calories "
+         << "todo" << endl;
+    cout << "Protein goal: " << proteinGoal << "Current Protein: " << protein << endl;
+    cout << "Carb goal: " << carbGoal << "Current carbs: " << carb << endl;
+    cout << "fat goal: " << fatGoal << "CUrrent fat: " << fat << endl;
 }
-
-
 userProfile::userProfile()
 {
 }
 
-
-
 userProfile::~userProfile()
 {
 }
+
+/* code graveyard
+while (getline(inFile, line))
+            {
+                if (line.find("M", 0) != string::npos)
+                {
+                    string testing;
+                    inFile >> testing;
+                    cout << "Here" << testing << endl;
+                }
+                return true;
+            }
+
+*/
