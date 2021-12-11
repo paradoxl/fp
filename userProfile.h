@@ -42,7 +42,7 @@ public:
 };
 void userProfile::login(){
     cout << "Welcome! Please login or create an account to continue" << endl;
-    cout << "1: login"
+    cout << "1: login\n"
          << "2: sign up" << endl;
     int login;
     cin >> login;
@@ -264,6 +264,7 @@ bool userProfile::exsists()
     // loading user goals
 
     inFile.close();
+    return false;
 }
 void userProfile::addMeal()
 {
