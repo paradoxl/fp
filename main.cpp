@@ -3,11 +3,14 @@
 using namespace std;
 
 #include "userProfile.h"
+#include "foodLog.h"
+
 
 int main() {  
     int input;
     bool m = true;
     userProfile user;
+    foodLog driver;
 
     cout << "\n\n\n\n\nWelcome! Please login or create an account to continue." << endl;
     cout << "\t1: login" << endl
@@ -46,6 +49,9 @@ int main() {
                 case 5:
                     cout << "Thanks for using the world's most ok macronutrient calculator" <<endl;
                     m = false;
+                    break;
+                default:
+                    cout << "Invalid Input, please try again." << endl;
                     break;
                 }
             }

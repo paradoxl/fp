@@ -119,6 +119,8 @@ void userProfile::changeName()
     }
     
 }
+
+//saves an initial user to the db
 void userProfile::saveUser()
 {
     cout << setw(80) << setfill('-') << "" << setfill(' ') << endl;
@@ -336,8 +338,7 @@ void userProfile::addMeal()
         printUser();
     }
 }
-void userProfile::printUser()
-{
+void userProfile::printUser(){
     ifstream inFile;
 
 
@@ -349,25 +350,6 @@ void userProfile::printUser()
         cout << "Cannot open input file." << endl;
         return;
     }
-
-    while (getline(inFile, line))
-    {
-        string sent;
-
-        inFile >> line;
-
-        if (line == "Macros")
-        {
-            inFile >> calorieGoal;
-            inFile >> proteinGoal;
-            inFile >> carbGoal;
-            inFile >> fatGoal;
-        }
-
-        // possible issue here on different compilers
-    }
-
-    inFile.close();
 
     for (int i = 0; i < foodGoals.size(); i++)
     {
@@ -389,6 +371,7 @@ void userProfile::printUser()
             << "Current carbs: " << totalCarb << endl;
     cout << "fat goal: " << fatGoal << setw(10) << setfill('-') << "" << setfill(' ')  
             << "Current fat: " << totalFat << endl;
+    
 }
 
 void userProfile::calculateTotals(){
@@ -399,7 +382,7 @@ void userProfile::calculateTotals(){
     //listIt = foodLog.begin();
 
     while(listPtr->link != nullptr){
-        cout << listPtr->arrayLog[1];
+        cout << listPtr->arrayLog[1] << "sup";
         //protein = stoi(listPtr->arrayLog[1]);
         //carb = stoi(listPtr->arrayLog[2]); 
         //fat = stoi(listPtr->arrayLog[3]);
@@ -420,17 +403,3 @@ userProfile::userProfile()
 userProfile::~userProfile()
 {
 }
-
-/* code graveyard
-while (getline(inFile, line))
-            {
-                if (line.find("M", 0) != string::npos)
-                {
-                    string testing;
-                    inFile >> testing;
-                    cout << "Here" << testing << endl;
-                }
-                return true;
-            }
-
-*/
