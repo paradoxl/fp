@@ -19,7 +19,6 @@ public:
     void addMeal();
     bool exsists();
     void menu();
-    void login();
 
     string name;
     int age;
@@ -40,32 +39,8 @@ public:
     vector<string> foodLog;
     vector<float> foodGoals;
 };
-void userProfile::login(){
-    cout << "Welcome! Please login or create an account to continue" << endl;
-    cout << "1: login\n"
-         << "2: sign up" << endl;
-    int login;
-    cin >> login;
 
-     if (login == 1)
-    {
-        if(exsists() == true){
-            menu();
-        }
-        else{
-            cout << "Incorrect input please try again" <<endl;
-        }
-    }
-    else if (login == 2)
-    {
-        saveUser();
-    }
-
-    else
-    {
-        cout << "INVALID INPUT" << endl;
-    }
-}
+//displays switch case based menu for navigation
 void userProfile::menu(){
     cout << "welcome to the worlds most ok nutrient calculator" << endl;
         cout << "how would you like to continue?" << endl;
@@ -97,6 +72,8 @@ void userProfile::menu(){
             break;
         }
 }
+
+//gives the user the ability to edit their name
 void userProfile::changeName()
 {
     string filename, name, Newname, newContent = "";
@@ -170,6 +147,8 @@ void userProfile::changeName()
     }
     
 }
+
+//saves an initial user to the db
 void userProfile::saveUser()
 {
     cout << setw(80) << setfill('-') << "" << setfill(' ') << endl;
@@ -227,6 +206,8 @@ void userProfile::saveUser()
 
     write.close();
 }
+
+//checks to see if use is in db
 bool userProfile::exsists()
 {
 
@@ -266,6 +247,8 @@ bool userProfile::exsists()
     inFile.close();
     return false;
 }
+
+//adds food to program
 void userProfile::addMeal()
 {
 
@@ -382,6 +365,9 @@ void userProfile::addMeal()
         printUser();
     }
 }
+
+
+//displays caloric goals and current foods
 void userProfile::printUser()
 {
 
@@ -434,17 +420,3 @@ userProfile::userProfile()
 userProfile::~userProfile()
 {
 }
-
-/* code graveyard
-while (getline(inFile, line))
-            {
-                if (line.find("M", 0) != string::npos)
-                {
-                    string testing;
-                    inFile >> testing;
-                    cout << "Here" << testing << endl;
-                }
-                return true;
-            }
-
-*/
