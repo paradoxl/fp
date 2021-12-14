@@ -4,6 +4,8 @@
 #include <iomanip>
 #include <string>
 #include <vector>
+
+
 using namespace std;
 
 class userProfile
@@ -12,13 +14,11 @@ private:
 public:
     userProfile();
     ~userProfile();
-    void printUser();
     void saveUser();
     void changeName();
     void removeMeal();
-    void addMeal();
     bool exsists();
-    void menu();
+    
 
     string name;
     int age;
@@ -36,42 +36,12 @@ public:
     string fat;
     string carb;
 
-    vector<string> foodLog;
+    
     vector<float> foodGoals;
 };
 
 //displays switch case based menu for navigation
-void userProfile::menu(){
-    cout << "welcome to the worlds most ok nutrient calculator" << endl;
-        cout << "how would you like to continue?" << endl;
 
-        cout << "1: add food" << endl;
-        cout << "2: remove food" << endl;
-        cout << "3: change username" << endl;
-        cout << "4: display current macros" << endl;
-        cout << "5: Exit" << endl;
-        int condition;
-        cin >> condition;
-
-        switch (condition)
-        {
-        case 1:
-           addMeal();
-            break;
-        case 2:
-            cout << "This feature is not yet available" << endl;
-            break;
-        case 3:
-            changeName();
-            break;
-        case 4:
-            printUser();
-            break;
-        case 5:
-            cout << "Thanks for using the world's most ok macronutrient calculator" <<endl;
-            break;
-        }
-}
 
 //gives the user the ability to edit their name
 void userProfile::changeName()
@@ -196,10 +166,8 @@ void userProfile::saveUser()
 
     if (write.is_open())
     {
-        write << "User Info"
-              << " " << name << " " << weight << " " << height << " " << age << " " << sex << endl;
-        write << "Macros"
-              << " " << calorieGoal << " " << proteinGoal << " " << carbGoal << " " << fatGoal << " " << calorieGoal << endl;
+        write << name << " " << weight << " " << height << " " << age << " " << sex << endl;
+        write <<"Macros" <<" " <<calorieGoal << " " << proteinGoal << " " << carbGoal << " " << fatGoal << " " << calorieGoal << endl;
 
         // to seperate writes to deliniate users personal info with the macro goals
     }
@@ -233,11 +201,11 @@ bool userProfile::exsists()
 
         if (line.find(userName, 0) != string::npos)
         {
-            return true;
+            return false;
         }
         else
         {
-            return false;
+            return true;
         }
         // possible issue here on different compilers
     }
@@ -248,171 +216,10 @@ bool userProfile::exsists()
     return false;
 }
 
-//adds food to program
-void userProfile::addMeal()
-{
-
-    ifstream inFile;
-
-    inFile.open("food.txt");
-
-    if (!inFile)
-    {
-        cout << "Cannot open input file." << endl;
-        return;
-    }
-    string search;
-
-    cout << "Which food would you like to search" << endl;
-    cin >> search;
-
-    int curLine;
-    string line;
-    string temp;
-    bool searchFinished;
-
-    while (getline(inFile, line))
-    {
-
-        if (line.find(search, 0) != string::npos)
-        {
-            cout << "found: " << search << " Macronutrients " << line << endl;
-            // searchFinished = true;
-        }
-    }
-
-    while (getline(inFile, line))
-    {
-
-        inFile >> temp;
-        if (temp == search)
-        {
-            foodName = temp;
-            inFile >> protein;
-            inFile >> carb;
-            inFile >> fat;
-
-            foodLog.push_back(foodName);
-            foodLog.push_back(protein);
-            foodLog.push_back(carb);
-            foodLog.push_back(fat);
-        }
-
-        //
-    }
-
-    inFile.close();
-
-    cout << "If we are displaying multiple results please refine your search below" << endl;
-    cout << "Please press Y to refine search" << endl;
-    cout << "Please Press N to confirm selection" << endl;
-    string refine;
-    cin >> refine;
-
-    if (refine == "y" || refine == "Y")
-    {
-        ifstream inFile;
-        string search2;
-        inFile.open("food.txt");
-        cin >> search2;
-        while (getline(inFile, line))
-        {
-            inFile >> temp;
-            if (temp == search2)
-            {
-                foodName = temp;
-                inFile >> protein;
-                inFile >> carb;
-                inFile >> fat;
-
-                foodLog.push_back(protein);
-                foodLog.push_back(carb);
-                foodLog.push_back(fat);
-            }
-
-            curLine++;
-            if (line.find(search2, 0) != string::npos)
-            {
-                cout << "found: " << search2 << " Macronutrients " << line << endl;
-            }
-        }
-
-        inFile.close();
-    }
-
-    else if (refine == "n" || refine == "N")
-    {
-        cout << "Thanks for adding that food!" << endl;
-    }
-    else
-    {
-        cout << "incorrect input" << endl;
-    }
-
-    cout << "Would you like to add another food to this meal? " << endl;
-    string additionalFood;
-    cin >> additionalFood;
-
-    if (additionalFood == "Y" || additionalFood == "y")
-    {
-        addMeal();
-    }
-
-    else if (additionalFood == "N" || additionalFood == "n")
-    {
-        cout << "thanks! your values are:" << endl;
-
-        printUser();
-    }
-}
 
 
-//displays caloric goals and current foods
-void userProfile::printUser()
-{
 
-    ifstream inFile;
 
-    inFile.open("user.txt");
-    string line;
-
-    if (!inFile)
-    {
-        cout << "Cannot open input file." << endl;
-        return;
-    }
-
-    while (getline(inFile, line))
-    {
-        string sent;
-
-        inFile >> line;
-
-        if (line == "Macros")
-        {
-            inFile >> calorieGoal;
-            inFile >> proteinGoal;
-            inFile >> carbGoal;
-            inFile >> fatGoal;
-        }
-
-        // possible issue here on different compilers
-    }
-
-    inFile.close();
-
-    for (int i = 0; i < foodGoals.size(); i++)
-    {
-        cout << foodGoals.at(i);
-        cout << "debug" << endl;
-    }
-    cout << "Macros: " << endl;
-    cout << "Caloric goal: " << calorieGoal << "Current Calories "
-         << "todo" << endl;
-    cout << "Protein goal: " << proteinGoal << "Current Protein: " << protein << endl;
-    cout << "Carb goal: " << carbGoal << "Current carbs: " << carb << endl;
-    cout << "fat goal: " << fatGoal << "CUrrent fat: " << fat << endl;
-}
 userProfile::userProfile()
 {
 }
