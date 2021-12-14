@@ -5,117 +5,115 @@
 #include <string>
 #include <vector>
 
-#include "projectunorderedLinkedList.h"
 
 using namespace std;
 
 class userProfile
 {
 private:
+public:
+    userProfile();
+    ~userProfile();
+    void saveUser();
+    void changeName();
+    void removeMeal();
+    bool exsists();
+    
+
     string name;
     int age;
     int height;
     int weight;
     string sex;
-    
-    unorderedLinkedList<string> foodLog;
-    float totalProtein;
-    float totalCarb;
-    float totalFat;
+
     float proteinGoal;
     float carbGoal;
     float fatGoal;
     float calorieGoal;
-    vector<float> foodGoals;
 
-public:
-    userProfile();
-    ~userProfile();
-    void printUser();
-    void saveUser();
-    void changeName();
-    void removeMeal();
-    void addMeal();
-    bool exists();
-    void calculateTotals();
+    string foodName;
+    string protein;
+    string fat;
+    string carb;
+
+    
+    vector<float> foodGoals;
 };
 
+//displays switch case based menu for navigation
+
+
+//gives the user the ability to edit their name
 void userProfile::changeName()
 {
-    string filename, currentName, Newname, newContent = "";
+    string filename, name, Newname, newContent = "";
     string word, temp;
     int noOfWords = 0, noOfReplacements = 0, matched, replaced;
 
     cout << setw(80) << setfill('-') << "" << setfill(' ') << endl;
     cout << endl;
-    //cout << "Enter a text file name: ";
-    //cin >> filename;
-    filename = "user.txt";
-    cout << "Please type your current username: ";
-    cin >> currentName;
-    if(currentName == name){
-        cout << "Please type your new username: ";
-        cin >> Newname;
-        cout << "\n";
+    cout << "Enter a text file name: ";
+    cin >> filename;
+    cout << "Please type your old username: ";
+    cin >> name;
+    cout << "Please type your new username: ";
+    cin >> Newname;
+    cout << "\n";
 
-        ifstream inFile;
-        inFile.open(filename.c_str());
+    ifstream inFile;
+    inFile.open(filename.c_str());
 
-        if (!inFile) // If file cannot be opened
-            cout << "Database unreachable. Try Again Later." << endl;
+    if (!inFile) // If file cannot be opened
+        cout << "File cannot be opened." << endl;
 
-        else
+    else
+    {
+
+        string content((istreambuf_iterator<char>(inFile)), (istreambuf_iterator<char>()));
+        inFile.close();
+
+        for (int i = 0; content[i] != '\0'; i++)
         {
+            if (content[i] == ' ' && i != 0)
+                noOfWords += 1;
+            matched = 1;
+            replaced = 0;
 
-            string content((istreambuf_iterator<char>(inFile)), (istreambuf_iterator<char>()));
-            inFile.close();
-
-            for (int i = 0; content[i] != '\0'; i++)
+            if (content[i] == name[0])
             {
-                if (content[i] == ' ' && i != 0)
-                    noOfWords += 1;
-                matched = 1;
-                replaced = 0;
+                temp = "";
 
-                if (content[i] == name[0])
+                for (int j = 0; name[j] != '\0'; j++)
                 {
-                    temp = "";
+                    temp += content[i];
+                    if (content[i] != name[j])
+                    {
+                        matched = 0;
+                    }
+                    i = i + 1;
+                }
+                i--;
 
-                    for (int j = 0; name[j] != '\0'; j++)
-                    {
-                        temp += content[i];
-                        if (content[i] != name[j])
-                        {
-                            matched = 0;
-                        }
-                        i = i + 1;
-                    }
-                    i--;
-
-                    if (matched == 1)
-                    {
-                        newContent += Newname;
-                        noOfReplacements++;
-                    }
-                    else
-                    {
-                        newContent += temp;
-                    }
+                if (matched == 1)
+                {
+                    newContent += Newname;
+                    noOfReplacements++;
                 }
                 else
                 {
-                    newContent += content[i];
+                    newContent += temp;
                 }
             }
-            noOfWords += 1;
-            ofstream outFile;
-            outFile.open(filename.c_str());
-            outFile << newContent << endl;
-            outFile.close();
+            else
+            {
+                newContent += content[i];
+            }
         }
-    }
-    else{
-        cout << "Incorrect Username." << endl;
+        noOfWords += 1;
+        ofstream outFile;
+        outFile.open(filename.c_str());
+        outFile << newContent << endl;
+        outFile.close();
     }
     
 }
@@ -169,15 +167,16 @@ void userProfile::saveUser()
     if (write.is_open())
     {
         write << name << " " << weight << " " << height << " " << age << " " << sex << endl;
-        write << "Macros"
-              << " " << calorieGoal << " " << proteinGoal << " " << carbGoal << " " << fatGoal << " " << calorieGoal << endl;
+        write <<"Macros" <<" " <<calorieGoal << " " << proteinGoal << " " << carbGoal << " " << fatGoal << " " << calorieGoal << endl;
 
         // to seperate writes to deliniate users personal info with the macro goals
     }
 
     write.close();
 }
-bool userProfile::exists()
+
+//checks to see if use is in db
+bool userProfile::exsists()
 {
 
     ifstream inFile;
@@ -190,12 +189,9 @@ bool userProfile::exists()
     }
     string userName;
 
-    cout << "\n\nPlease enter your username: " << endl;
+    cout << "What is the name that is attached to the account?" << endl;
     cin >> userName;
-    
-    if(userName == "Macros")
-        return false;
-    
+    // this block runs twice for some reason
     int curLine;
     string line;
     string temp;
@@ -219,187 +215,15 @@ bool userProfile::exists()
     inFile.close();
     return false;
 }
-void userProfile::addMeal()
-{
-    string protein, carb, fat, foodName;
-    ifstream inFile;
-
-    inFile.open("food.txt");
-
-    if (!inFile)
-    {
-        cout << "Database can not be reached." << endl;
-        return;
-    }
-    string search;
-
-    cout << "Which food would you like to search" << endl;
-    cin >> search;
-
-    int curLine;
-    string line;
-    string temp;
-    bool searchFinished;
-
-    while (getline(inFile, line))
-    {
-
-        if (line.find(search, 0) != string::npos)
-        {
-            cout << "found: " << search << ". Its macronutrients are: " << line << endl;
-            // searchFinished = true;
-        }
-    }
-
-    while (getline(inFile, line))
-    {
-
-        inFile >> temp;
-        if (temp == search)
-        {
-            foodName = temp;
-            inFile >> protein;
-            inFile >> carb;
-            inFile >> fat;
-
-            foodLog.insertFirst(foodName, protein, carb, fat);
-
-            //foodLog.push_back(foodName);
-            //foodLog.push_back(protein);
-            //foodLog.push_back(carb);
-            //foodLog.push_back(fat);
-        }
-
-        //
-    }
-
-    inFile.close();
-
-    cout << "If we are displaying multiple results please refine your search below" << endl;
-    cout << "Please press Y to refine search" << endl;
-    cout << "Please Press N to confirm selection" << endl;
-    string refine;
-    cin >> refine;
-
-    if (refine == "y" || refine == "Y")
-    {
-        string search2;
-        inFile.open("food.txt");
-        cin >> search2;
-        while (getline(inFile, line))
-        {
-            inFile >> temp;
-            if (temp == search2)
-            {
-                foodName = temp;
-                inFile >> protein;
-                inFile >> carb;
-                inFile >> fat;
-
-                foodLog.insertFirst(foodName, protein, carb, fat);
-
-                //foodLog.push_back(protein);
-                //foodLog.push_back(carb);
-                //foodLog.push_back(fat);
-            }
-
-            //curLine++;
-            if (line.find(search2, 0) != string::npos)
-            {
-                cout << "found: " << search2 << " Macronutrients " << line << endl;
-            }
-        }
-
-        inFile.close();
-    }
-
-    else if (refine == "n" || refine == "N")
-    {
-        cout << "Thanks for adding that food!" << endl;
-    }
-    else
-    {
-        cout << "incorrect input" << endl;
-    }
-
-    cout << "Would you like to add another food to this meal? " << endl;
-    string additionalFood;
-    cin >> additionalFood;
-
-    if (additionalFood == "Y" || additionalFood == "y")
-    {
-        addMeal();
-    }
-
-    else if (additionalFood == "N" || additionalFood == "n")
-    {
-        cout << "thanks! your values are:" << endl;
-
-        printUser();
-    }
-}
-void userProfile::printUser(){
-    ifstream inFile;
 
 
-    inFile.open("user.txt");
-    string line;
 
-    if (!inFile)
-    {
-        cout << "Cannot open input file." << endl;
-        return;
-    }
 
-    for (int i = 0; i < foodGoals.size(); i++)
-    {
-        cout << foodGoals.at(i);
-        cout << "debug" << endl;
-    }
-    
-    calculateTotals();
-
-    cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n" << setw(80) << setfill('-') << "" << setfill(' ') << endl;
-    cout << "\t\t\tMacros " << endl;
-    cout << setw(80) << setfill('-') << "" << setfill(' ') << endl;
-
-    cout << "Caloric goal: " << calorieGoal << setw(10) << setfill('-') << "" << setfill(' ') 
-            << "Current Calories " << "todo" << endl;
-    cout << "Protein goal: " << proteinGoal << setw(10) << setfill('-') << "" << setfill(' ')  
-            << "Current Protein: " << totalProtein << endl;
-    cout << "Carb goal: " << carbGoal << setw(10) << setfill('-') << "" << setfill(' ')  
-            << "Current carbs: " << totalCarb << endl;
-    cout << "fat goal: " << fatGoal << setw(10) << setfill('-') << "" << setfill(' ')  
-            << "Current fat: " << totalFat << endl;
-    
-}
-
-void userProfile::calculateTotals(){
-    //linkedListIterator<string> listIt;
-    nodeType<string> *listPtr;
-    float protein, carb, fat;
-
-    //listIt = foodLog.begin();
-
-    while(listPtr->link != nullptr){
-        cout << listPtr->arrayLog[1] << "sup";
-        //protein = stoi(listPtr->arrayLog[1]);
-        //carb = stoi(listPtr->arrayLog[2]); 
-        //fat = stoi(listPtr->arrayLog[3]);
-        //totalProtein = totalProtein + protein;
-        //totalCarb = totalCarb + carb;
-        //totalFat = totalFat + fat;
-        listPtr = listPtr->link;
-    }
-
-}
 
 userProfile::userProfile()
 {
-    totalProtein = 0;
-    totalCarb = 0;
-    totalFat =  0;
 }
+
 userProfile::~userProfile()
 {
 }
