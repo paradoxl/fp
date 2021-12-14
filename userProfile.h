@@ -407,11 +407,11 @@ void userProfile::printUser()
         cout << "debug" << endl;
     }
     cout << "Macros: " << endl;
-    cout << "Caloric goal: " << calorieGoal << "Current Calories "
-         << "todo" << endl;
-    cout << "Protein goal: " << proteinGoal << "Current Protein: " << protein << endl;
-    cout << "Carb goal: " << carbGoal << "Current carbs: " << carb << endl;
-    cout << "fat goal: " << fatGoal << "CUrrent fat: " << fat << endl;
+    cout << "Caloric goal: \t" << calorieGoal << "\tCurrent Calories: "
+         << "(todo)" << endl;
+    cout << "Protein goal: \t" << proteinGoal << "\tCurrent Protein: \t" << protein << endl;
+    cout << "Carb goal: \t" << carbGoal << "\tCurrent carbs: \t" << carb << endl;
+    cout << "fat goal: \t" << fatGoal << "\tCurrent fat: \t" << fat << endl;
 }
 userProfile::userProfile()
 {
