@@ -19,7 +19,7 @@ int main()
 
      if (login == 1)
     {
-        if(user.exsists()) {
+        if(user.exsists() == true){
             
            cout << "welcome to the worlds most ok nutrient calculator" << endl;
         cout << "how would you like to continue?" << endl;
