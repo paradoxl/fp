@@ -26,6 +26,11 @@ public:
     float carbGoal;
     float fatGoal;
 
+    float proteinConversion;
+    float carbConversion;
+    float fatConversion;
+    float totalCalories;
+
     vector <float> foodGoal;
 };
 
@@ -56,6 +61,8 @@ void foodLog::printUser()
             inFile >> proteinGoal;
             inFile >> carbGoal;
             inFile >> fatGoal;
+
+                totalCalories = (proteinConversion * 9) + (carbConversion * 4) + (fatConversion * 4);
         }
 
         // possible issue here on different compilers
@@ -68,12 +75,18 @@ void foodLog::printUser()
         cout << food.at(i);
         
     }
+
+    float caloriesRemaining = calorieGoal - totalCalories;
+    float proteinRemaining = proteinGoal - proteinConversion;
+    float carbsRemaining = carbGoal - carbConversion;
+    float fatRemaining = fatGoal - fatConversion;
+
+
     cout << "Macros: " << endl;
-    cout << "Caloric goal: \t" << calorieGoal << "\tCurrent Calories: "
-         << "(todo)" << endl;
-    cout << "Protein goal: \t" << proteinGoal << "\tCurrent Protein: \t" << protein << endl;
-    cout << "Carb goal: \t" << carbGoal << "\tCurrent carbs: \t" << carb << endl;
-    cout << "fat goal: \t" << fatGoal << "\tCurrent fat: \t" << fat << endl;
+    cout << "Caloric goal: \t" << calorieGoal << "\tCurrent Calories: "<< totalCalories << "\tCalories Remaining: \t" << caloriesRemaining <<endl;
+    cout << "Protein goal: \t" << proteinGoal << "\tCurrent Protein: " << proteinConversion << "\tProtein Remaining: \t" << proteinRemaining <<endl;
+    cout << "Carb goal: \t" << carbGoal << "\tCurrent carbs: \t" << carbConversion <<  "\tCarbs Remaining: \t" << carbsRemaining << endl;
+    cout << "fat goal: \t" << fatGoal << "\tCurrent fat: \t" << fatConversion <<  "\tFat Remaining: \t" << fatRemaining << endl;
 }
 
 //adds food to program
@@ -124,6 +137,11 @@ void foodLog::addMeal()
             food.push_back(protein);
             food.push_back(carb);
             food.push_back(fat);
+
+             proteinConversion = std::stof(protein);
+             carbConversion = std::stof(carb);
+             fatConversion = std:: stof(fat);
+            
         }
 
         //
@@ -156,6 +174,10 @@ void foodLog::addMeal()
                 food.push_back(protein);
                 food.push_back(carb);
                 food.push_back(fat);
+
+             proteinConversion = std::stof(protein);
+             carbConversion = std::stof(carb);
+             fatConversion = std:: stof(fat);
             }
 
             curLine++;
