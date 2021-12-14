@@ -4,6 +4,9 @@
 #include <iomanip>
 #include <string>
 #include <vector>
+
+#include "projectunorderedLinkedList.h"
+
 using namespace std;
 
 class userProfile
@@ -14,6 +17,16 @@ private:
     int height;
     int weight;
     string sex;
+    
+    unorderedLinkedList<string> foodLog;
+    float totalProtein;
+    float totalCarb;
+    float totalFat;
+    float proteinGoal;
+    float carbGoal;
+    float fatGoal;
+    float calorieGoal;
+    vector<float> foodGoals;
 
 public:
     userProfile();
@@ -24,19 +37,7 @@ public:
     void removeMeal();
     void addMeal();
     bool exists();
-
-    float proteinGoal;
-    float carbGoal;
-    float fatGoal;
-    float calorieGoal;
-
-    string foodName;
-    string protein;
-    string fat;
-    string carb;
-
-    vector<string> foodLog;
-    vector<float> foodGoals;
+    void calculateTotals();
 };
 
 void userProfile::changeName()
@@ -218,7 +219,7 @@ bool userProfile::exists()
 }
 void userProfile::addMeal()
 {
-
+    string protein, carb, fat, foodName;
     ifstream inFile;
 
     inFile.open("food.txt");
@@ -243,7 +244,7 @@ void userProfile::addMeal()
 
         if (line.find(search, 0) != string::npos)
         {
-            cout << "found: " << search << " Macronutrients " << line << endl;
+            cout << "found: " << search << ". Its macronutrients are: " << line << endl;
             // searchFinished = true;
         }
     }
@@ -259,10 +260,12 @@ void userProfile::addMeal()
             inFile >> carb;
             inFile >> fat;
 
-            foodLog.push_back(foodName);
-            foodLog.push_back(protein);
-            foodLog.push_back(carb);
-            foodLog.push_back(fat);
+            foodLog.insertFirst(foodName, protein, carb, fat);
+
+            //foodLog.push_back(foodName);
+            //foodLog.push_back(protein);
+            //foodLog.push_back(carb);
+            //foodLog.push_back(fat);
         }
 
         //
@@ -278,7 +281,6 @@ void userProfile::addMeal()
 
     if (refine == "y" || refine == "Y")
     {
-        ifstream inFile;
         string search2;
         inFile.open("food.txt");
         cin >> search2;
@@ -292,12 +294,14 @@ void userProfile::addMeal()
                 inFile >> carb;
                 inFile >> fat;
 
-                foodLog.push_back(protein);
-                foodLog.push_back(carb);
-                foodLog.push_back(fat);
+                foodLog.insertFirst(foodName, protein, carb, fat);
+
+                //foodLog.push_back(protein);
+                //foodLog.push_back(carb);
+                //foodLog.push_back(fat);
             }
 
-            curLine++;
+            //curLine++;
             if (line.find(search2, 0) != string::npos)
             {
                 cout << "found: " << search2 << " Macronutrients " << line << endl;
@@ -334,8 +338,8 @@ void userProfile::addMeal()
 }
 void userProfile::printUser()
 {
-
     ifstream inFile;
+
 
     inFile.open("user.txt");
     string line;
@@ -371,19 +375,48 @@ void userProfile::printUser()
         cout << "debug" << endl;
     }
     
+    calculateTotals();
+
     cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n" << setw(80) << setfill('-') << "" << setfill(' ') << endl;
     cout << "\t\t\tMacros " << endl;
     cout << setw(80) << setfill('-') << "" << setfill(' ') << endl;
-    cout << "Caloric goal: " << calorieGoal << "Current Calories "
-         << "todo" << endl;
-    cout << "Protein goal: " << proteinGoal << "Current Protein: " << protein << endl;
-    cout << "Carb goal: " << carbGoal << "Current carbs: " << carb << endl;
-    cout << "fat goal: " << fatGoal << "CUrrent fat: " << fat << endl;
-}
-userProfile::userProfile()
-{
+
+    cout << "Caloric goal: " << calorieGoal << setw(10) << setfill('-') << "" << setfill(' ') 
+            << "Current Calories " << "todo" << endl;
+    cout << "Protein goal: " << proteinGoal << setw(10) << setfill('-') << "" << setfill(' ')  
+            << "Current Protein: " << totalProtein << endl;
+    cout << "Carb goal: " << carbGoal << setw(10) << setfill('-') << "" << setfill(' ')  
+            << "Current carbs: " << totalCarb << endl;
+    cout << "fat goal: " << fatGoal << setw(10) << setfill('-') << "" << setfill(' ')  
+            << "Current fat: " << totalFat << endl;
 }
 
+void userProfile::calculateTotals(){
+    //linkedListIterator<string> listIt;
+    nodeType<string> *listPtr;
+    float protein, carb, fat;
+
+    //listIt = foodLog.begin();
+
+    while(listPtr->link != nullptr){
+        cout << listPtr->arrayLog[1];
+        //protein = stoi(listPtr->arrayLog[1]);
+        //carb = stoi(listPtr->arrayLog[2]); 
+        //fat = stoi(listPtr->arrayLog[3]);
+        //totalProtein = totalProtein + protein;
+        //totalCarb = totalCarb + carb;
+        //totalFat = totalFat + fat;
+        listPtr = listPtr->link;
+    }
+
+}
+
+userProfile::userProfile()
+{
+    totalProtein = 0;
+    totalCarb = 0;
+    totalFat =  0;
+}
 userProfile::~userProfile()
 {
 }
