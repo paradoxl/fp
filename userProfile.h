@@ -9,6 +9,12 @@ using namespace std;
 class userProfile
 {
 private:
+    string name;
+    int age;
+    int height;
+    int weight;
+    string sex;
+
 public:
     userProfile();
     ~userProfile();
@@ -17,15 +23,7 @@ public:
     void changeName();
     void removeMeal();
     void addMeal();
-    bool exsists();
-    void menu();
-    void login();
-
-    string name;
-    int age;
-    int height;
-    int weight;
-    string sex;
+    bool exists();
 
     float proteinGoal;
     float carbGoal;
@@ -40,133 +38,83 @@ public:
     vector<string> foodLog;
     vector<float> foodGoals;
 };
-void userProfile::login(){
-    cout << "Welcome! Please login or create an account to continue" << endl;
-    cout << "1: login\n"
-         << "2: sign up" << endl;
-    int login;
-    cin >> login;
 
-     if (login == 1)
-    {
-        if(exsists() == true){
-            menu();
-        }
-        else{
-            cout << "Incorrect input please try again" <<endl;
-        }
-    }
-    else if (login == 2)
-    {
-        saveUser();
-    }
-
-    else
-    {
-        cout << "INVALID INPUT" << endl;
-    }
-}
-void userProfile::menu(){
-    cout << "welcome to the worlds most ok nutrient calculator" << endl;
-        cout << "how would you like to continue?" << endl;
-
-        cout << "1: add food" << endl;
-        cout << "2: remove food" << endl;
-        cout << "3: change username" << endl;
-        cout << "4: display current macros" << endl;
-        cout << "5: Exit" << endl;
-        int condition;
-        cin >> condition;
-
-        switch (condition)
-        {
-        case 1:
-           addMeal();
-            break;
-        case 2:
-            cout << "This feature is not yet available" << endl;
-            break;
-        case 3:
-            changeName();
-            break;
-        case 4:
-            printUser();
-            break;
-        case 5:
-            cout << "Thanks for using the world's most ok macronutrient calculator" <<endl;
-            break;
-        }
-}
 void userProfile::changeName()
 {
-    string filename, name, Newname, newContent = "";
+    string filename, currentName, Newname, newContent = "";
     string word, temp;
     int noOfWords = 0, noOfReplacements = 0, matched, replaced;
 
     cout << setw(80) << setfill('-') << "" << setfill(' ') << endl;
     cout << endl;
-    cout << "Enter a text file name: ";
-    cin >> filename;
-    cout << "Please type your old username: ";
-    cin >> name;
-    cout << "Please type your new username: ";
-    cin >> Newname;
-    cout << "\n";
+    //cout << "Enter a text file name: ";
+    //cin >> filename;
+    filename = "user.txt";
+    cout << "Please type your current username: ";
+    cin >> currentName;
+    if(currentName == name){
+        cout << "Please type your new username: ";
+        cin >> Newname;
+        cout << "\n";
 
-    ifstream inFile;
-    inFile.open(filename.c_str());
+        ifstream inFile;
+        inFile.open(filename.c_str());
 
-    if (!inFile) // If file cannot be opened
-        cout << "File cannot be opened." << endl;
+        if (!inFile) // If file cannot be opened
+            cout << "Database unreachable. Try Again Later." << endl;
 
-    else
-    {
-
-        string content((istreambuf_iterator<char>(inFile)), (istreambuf_iterator<char>()));
-        inFile.close();
-
-        for (int i = 0; content[i] != '\0'; i++)
+        else
         {
-            if (content[i] == ' ' && i != 0)
-                noOfWords += 1;
-            matched = 1;
-            replaced = 0;
 
-            if (content[i] == name[0])
+            string content((istreambuf_iterator<char>(inFile)), (istreambuf_iterator<char>()));
+            inFile.close();
+
+            for (int i = 0; content[i] != '\0'; i++)
             {
-                temp = "";
+                if (content[i] == ' ' && i != 0)
+                    noOfWords += 1;
+                matched = 1;
+                replaced = 0;
 
-                for (int j = 0; name[j] != '\0'; j++)
+                if (content[i] == name[0])
                 {
-                    temp += content[i];
-                    if (content[i] != name[j])
+                    temp = "";
+
+                    for (int j = 0; name[j] != '\0'; j++)
                     {
-                        matched = 0;
+                        temp += content[i];
+                        if (content[i] != name[j])
+                        {
+                            matched = 0;
+                        }
+                        i = i + 1;
                     }
-                    i = i + 1;
-                }
-                i--;
+                    i--;
 
-                if (matched == 1)
-                {
-                    newContent += Newname;
-                    noOfReplacements++;
+                    if (matched == 1)
+                    {
+                        newContent += Newname;
+                        noOfReplacements++;
+                    }
+                    else
+                    {
+                        newContent += temp;
+                    }
                 }
                 else
                 {
-                    newContent += temp;
+                    newContent += content[i];
                 }
             }
-            else
-            {
-                newContent += content[i];
-            }
+            noOfWords += 1;
+            ofstream outFile;
+            outFile.open(filename.c_str());
+            outFile << newContent << endl;
+            outFile.close();
         }
-        noOfWords += 1;
-        ofstream outFile;
-        outFile.open(filename.c_str());
-        outFile << newContent << endl;
-        outFile.close();
+    }
+    else{
+        cout << "Incorrect Username." << endl;
     }
     
 }
@@ -217,8 +165,7 @@ void userProfile::saveUser()
 
     if (write.is_open())
     {
-        write << "User Info"
-              << " " << name << " " << weight << " " << height << " " << age << " " << sex << endl;
+        write << name << " " << weight << " " << height << " " << age << " " << sex << endl;
         write << "Macros"
               << " " << calorieGoal << " " << proteinGoal << " " << carbGoal << " " << fatGoal << " " << calorieGoal << endl;
 
@@ -227,7 +174,7 @@ void userProfile::saveUser()
 
     write.close();
 }
-bool userProfile::exsists()
+bool userProfile::exists()
 {
 
     ifstream inFile;
@@ -240,9 +187,12 @@ bool userProfile::exsists()
     }
     string userName;
 
-    cout << "What is the name that is attached to the account?" << endl;
+    cout << "\n\nPlease enter your username: " << endl;
     cin >> userName;
-    // this block runs twice for some reason
+    
+    if(userName == "Macros")
+        return false;
+    
     int curLine;
     string line;
     string temp;
@@ -252,11 +202,11 @@ bool userProfile::exsists()
 
         if (line.find(userName, 0) != string::npos)
         {
-            return true;
+            return false;
         }
         else
         {
-            return false;
+            return true;
         }
         // possible issue here on different compilers
     }
@@ -275,7 +225,7 @@ void userProfile::addMeal()
 
     if (!inFile)
     {
-        cout << "Cannot open input file." << endl;
+        cout << "Database can not be reached." << endl;
         return;
     }
     string search;
@@ -420,7 +370,10 @@ void userProfile::printUser()
         cout << foodGoals.at(i);
         cout << "debug" << endl;
     }
-    cout << "Macros: " << endl;
+    
+    cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n" << setw(80) << setfill('-') << "" << setfill(' ') << endl;
+    cout << "\t\t\tMacros " << endl;
+    cout << setw(80) << setfill('-') << "" << setfill(' ') << endl;
     cout << "Caloric goal: " << calorieGoal << "Current Calories "
          << "todo" << endl;
     cout << "Protein goal: " << proteinGoal << "Current Protein: " << protein << endl;
