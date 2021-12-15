@@ -56,7 +56,7 @@ class unorderedLinkedList : public linkedListType<Type> {
                                 //node in the list
 
         while (current != nullptr && !found)  //search the list
-            if (current->info == searchItem)  //searchItem is found
+            if (current->arrayLog[0] == searchItem)  //searchItem is found
                 found = true;
             else
                 current = current->link;  //make current point to
@@ -112,7 +112,7 @@ class unorderedLinkedList : public linkedListType<Type> {
             cout << "Cannot delete from an empty list."
                 << endl;
         else {
-            if (this->first->info == deleteItem)  //Case 2
+            if (this->first->arrayLog[0] == deleteItem)  //Case 2
             {
                 current = this->first;
                 this->first = this->first->link;
@@ -128,7 +128,7 @@ class unorderedLinkedList : public linkedListType<Type> {
                                             //the second node
 
                 while (current != nullptr && !found) {
-                    if (current->info != deleteItem) {
+                    if (current->arrayLog[0] != deleteItem) {
                         trailCurrent = current;
                         current = current->link;
                     } else
