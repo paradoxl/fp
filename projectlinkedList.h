@@ -20,6 +20,10 @@ using namespace std;
     template <class Type>
     class linkedListIterator {
     public:
+        Type returnArrayElement(int x);
+        //Function to return x array element
+        //Postcondition: Returns data from arrayLog[x]
+
         linkedListIterator();
         // Default constructor
         // Postcondition: current = nullptr;
@@ -56,6 +60,10 @@ using namespace std;
     };
 
         //Functions of LinkedListIterator - 
+        template<class Type>
+        Type linkedListIterator<Type>::returnArrayElement(int x){
+            return current->arrayLog[x];
+        }
         template <class Type>
         linkedListIterator<Type>::linkedListIterator() {
             current = nullptr;

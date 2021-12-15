@@ -1,225 +1,172 @@
 #include <iostream>
-#include <vector>
 #include <fstream>
 #include <ostream>
 #include <string>
+
+#include "projectunorderedLinkedList.h"
+
 using namespace std;
 
 class foodLog
 {
 private:
-    
+    unorderedLinkedList<string> dailyLog;
+    void calculateTotals();    
+    float calories;
+    float proteins;
+    float carbs;
+    float fats;
+
 public:
     void addMeal();
-    void printUser();
+    float getCalories();
+    float getProteins();
+    float getCarbs();
+    float getFats();
     foodLog();
     ~foodLog();
-
-    string foodName;
-    string protein;
-    string fat;
-    string carb;
-    vector<string> food;
-
-    float calorieGoal;
-    float proteinGoal;
-    float carbGoal;
-    float fatGoal;
-
-    float proteinConversion;
-    float carbConversion;
-    float fatConversion;
-    float totalCalories;
-
-    vector <float> foodGoal;
 };
 
-//displays caloric goals and current foods
-void foodLog::printUser()
-{
+void foodLog::calculateTotals(){
+    linkedListIterator<string> listIt;
 
-    ifstream inFile;
-
-    inFile.open("user.txt");
-    string line;
-
-    if (!inFile)
-    {
-        cout << "Cannot open input file." << endl;
-        return;
+    listIt = dailyLog.begin();
+    while(listIt != dailyLog.end()){
+        proteins = proteins + stof(listIt.returnArrayElement(1));
+        carbs = carbs + stof(listIt.returnArrayElement(2));
+        fats = fats + stof(listIt.returnArrayElement(3));
+        ++listIt;
     }
 
-    while (getline(inFile, line))
-    {
-        string sent;
-
-        inFile >> line;
-
-        if (line == "Macros")
-        {
-            inFile >> calorieGoal;
-            inFile >> proteinGoal;
-            inFile >> carbGoal;
-            inFile >> fatGoal;
-
-                totalCalories = (proteinConversion * 9) + (carbConversion * 4) + (fatConversion * 4);
-        }
-
-        // possible issue here on different compilers
-    }
-
-    inFile.close();
-
-    for (int i = 0; i < food.size(); i++)
-    {
-        cout << food.at(i);
-        
-    }
-
-    float caloriesRemaining = calorieGoal - totalCalories;
-    float proteinRemaining = proteinGoal - proteinConversion;
-    float carbsRemaining = carbGoal - carbConversion;
-    float fatRemaining = fatGoal - fatConversion;
-
-
-    cout << "Macros: " << endl;
-    cout << "Caloric goal: \t" << calorieGoal << "\tCurrent Calories: "<< totalCalories << "\tCalories Remaining: \t" << caloriesRemaining <<endl;
-    cout << "Protein goal: \t" << proteinGoal << "\tCurrent Protein: " << proteinConversion << "\tProtein Remaining: \t" << proteinRemaining <<endl;
-    cout << "Carb goal: \t" << carbGoal << "\tCurrent carbs: \t" << carbConversion <<  "\tCarbs Remaining: \t" << carbsRemaining << endl;
-    cout << "fat goal: \t" << fatGoal << "\tCurrent fat: \t" << fatConversion <<  "\tFat Remaining: \t" << fatRemaining << endl;
+    calories = proteins * 9 + carbs * 4 + fats * 4;
 }
 
 //adds food to program
 void foodLog::addMeal()
 {
-
     ifstream inFile;
+    string search, proteinStr, carbStr, fatStr, foodName;
+    int x=0;
 
     inFile.open("food.txt");
 
-    if (!inFile)
-    {
-        cout << "Cannot open input file." << endl;
-        return;
+    if (!inFile){
+        cout << "Our database is currently unreachable." << endl;
     }
-    string search;
+    else{
+        for(int x = 0; x < 15; x++)
+            cout << "\n";
+        cout << "Please enter a food you want to add" << endl;
+        for(int x = 0; x < 15; x++)
+                    cout << "\n";
+        cin >> search;
 
-    cout << "Which food would you like to search" << endl;
-    cin >> search;
+        int curLine;
+        string line;
+        string temp;
 
-    int curLine;
-    string line;
-    string temp;
-    bool searchFinished;
-
-    while (getline(inFile, line))
-    {
-
-        if (line.find(search, 0) != string::npos)
-        {
-            cout << "found: " << search << " Macronutrients " << line << endl;
-            // searchFinished = true;
-        }
-    }
-
-    while (getline(inFile, line))
-    {
-
-        inFile >> temp;
-        if (temp == search)
-        {
-            foodName = temp;
-            inFile >> protein;
-            inFile >> carb;
-            inFile >> fat;
-
-            food.push_back(foodName);
-            food.push_back(protein);
-            food.push_back(carb);
-            food.push_back(fat);
-
-             proteinConversion = std::stof(protein);
-             carbConversion = std::stof(carb);
-             fatConversion = std:: stof(fat);
-            
-        }
-
-        //
-    }
-
-    inFile.close();
-
-    cout << "If we are displaying multiple results please refine your search below" << endl;
-    cout << "Please press Y to refine search" << endl;
-    cout << "Please Press N to confirm selection" << endl;
-    string refine;
-    cin >> refine;
-
-    if (refine == "y" || refine == "Y")
-    {
-        ifstream inFile;
-        string search2;
-        inFile.open("food.txt");
-        cin >> search2;
+        for(int x = 0; x < 15; x++)
+                    cout << "\n";
         while (getline(inFile, line))
-        {
-            inFile >> temp;
-            if (temp == search2)
-            {
-                foodName = temp;
-                inFile >> protein;
-                inFile >> carb;
-                inFile >> fat;
-
-                food.push_back(protein);
-                food.push_back(carb);
-                food.push_back(fat);
-
-             proteinConversion = std::stof(protein);
-             carbConversion = std::stof(carb);
-             fatConversion = std:: stof(fat);
+            if (line.find(search, 0) != string::npos)
+                x++;
+        
+        inFile.close();
+        
+        if(x==1){
+            inFile.open("food.txt");
+            while (getline(inFile, line)){
+                if (line.find(search, 0) != string::npos){
+                    cout << "found: " << search << " Macronutrients " << line << endl;
+                }
             }
-
-            curLine++;
-            if (line.find(search2, 0) != string::npos)
-            {
-                cout << "found: " << search2 << " Macronutrients " << line << endl;
+            inFile.close();
+            inFile.open("food.txt");
+            while (getline(inFile, line)){
+                inFile >> temp;
+                if (temp == search){                    
+                    foodName = temp;
+                    inFile >> proteinStr;
+                    inFile >> carbStr;
+                    inFile >> fatStr;
+                    dailyLog.insertFirst(foodName, proteinStr, carbStr, fatStr);
+                    x=-1;
+                }
             }
+            inFile.close();
         }
 
-        inFile.close();
-    }
+        
 
-    else if (refine == "n" || refine == "N")
-    {
-        cout << "Thanks for adding that food!" << endl;
-    }
-    else
-    {
-        cout << "incorrect input" << endl;
-    }
+        while (x>1 || x == 0){
+            inFile.open("food.txt");
+            while (getline(inFile, line)){
+                if (line.find(search, 0) != string::npos){
+                    cout << "found: " << search << " Macronutrients " << line << endl;
+                }
+            }
+            inFile.close();
+            if(x==0)
+                cout << "The food you entered is not apart of our database. "
+                    << "Please  try again." << endl;
+            else
+                cout << "Please refine your search." << endl;
+            cin >> search;
+            inFile.open("food.txt");
+            while (getline(inFile, line)){
+                inFile >> temp;
+                if (temp == search){
+                    foodName = temp;
+                    inFile >> proteinStr;
+                    inFile >> carbStr;
+                    inFile >> fatStr;
+                    dailyLog.insertFirst(foodName, proteinStr, carbStr, fatStr);
+                    x = -1;
+                }
 
-    cout << "Would you like to add another food to this meal? " << endl;
-    string additionalFood;
-    cin >> additionalFood;
+                curLine++;
+                if (line.find(search, 0) != string::npos){
+                    cout << "found: " << search << " Macronutrients " << line << endl;
+                }
+            }
 
-    if (additionalFood == "Y" || additionalFood == "y")
-    {
-        addMeal();
+            inFile.close();
+        }
+
+        cout << "Would you like to add another food to this meal?(Y/N) " << endl;
+        string additionalFood;
+        cin >> additionalFood;
+
+        if (additionalFood == "Y" || additionalFood == "y")
+        {
+            addMeal();
+        }
+
+        else{
+            calculateTotals();
+        }
     }
+}   
 
-    else if (additionalFood == "N" || additionalFood == "n")
-    {
-        cout << "thanks! your values are:" << endl;
-
-        printUser();
-    }
+float foodLog::getCalories(){
+    return calories;
 }
-
+float foodLog::getProteins(){
+    return proteins;
+}
+float foodLog::getCarbs(){
+    return carbs;
+}
+float foodLog::getFats(){
+    return fats;
+}
 foodLog::foodLog()
 {
+    calories=0.0;
+    proteins=0.0;
+    carbs=0.0;
+    fats=0.0;
 }
 
-foodLog::~foodLog()
-{
+foodLog::~foodLog(){
 }
