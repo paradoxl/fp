@@ -27,6 +27,7 @@ public:
     ~userProfile();
     void printUser();
     void addMeal();
+    void deleteMeal();
     void saveUser();
     void changeName();
     void removeMeal();
@@ -224,6 +225,11 @@ void userProfile::saveUser()
     }
 
     write.close();
+}
+
+// Michelle created removeMeal function
+void userProfile::deleteMeal() {
+   foodHistory.deleteMeal();
 }
 
 //checks to see if use is in db

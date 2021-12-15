@@ -42,7 +42,8 @@ int main(){
                     user.addMeal();
                     break;
                 case 2:
-                    cout << "This feature is not yet available" << endl;
+                    //cout << "This feature is not yet available" << endl;
+                    user.deleteMeal();
                     break;
                 case 3:
                     user.changeName();

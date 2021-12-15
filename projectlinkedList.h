@@ -250,11 +250,11 @@ using namespace std;
         void linkedListType<Type>::print() const {
             nodeType<Type>* current;        // pointer to traverse the list
 
-            cout << "list: ";
+            //cout << "list: ";
 
             current = first;                // set current so that it points to the first node
             while (current != nullptr) {    // while more data to print
-                cout << current->info << " ";
+                cout << current->arrayLog[0] << "\n";
                 current = current->link;
             }
             cout << endl;
