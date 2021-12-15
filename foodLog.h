@@ -30,7 +30,10 @@ public:
 
 void foodLog::calculateTotals(){
     linkedListIterator<string> listIt;
-
+    
+    proteins = 0;
+    carbs = 0;
+    fats = 0;
     listIt = dailyLog.begin();
     while(listIt != dailyLog.end()){
         proteins = proteins + stof(listIt.returnArrayElement(1));
